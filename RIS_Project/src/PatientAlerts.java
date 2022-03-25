@@ -210,7 +210,7 @@ public class PatientAlerts extends JFrame {
 		contentPane.add(lblNewLabel_3_1_1);
 		
 		DefaultTableModel model;
-		Object[] labels = {"Modality ID", "Modality"};
+		Object[] labels = {"Alert ID", "Alert"};
 		try(Connection conn = (Connection) sql.establishConn())
 		{
 			Statement stmnt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -238,6 +238,7 @@ public class PatientAlerts extends JFrame {
 			jt.setBounds(0, 200, 1200, 250);
 			contentPane.add(jt);
 		}catch(Exception e) {e.printStackTrace();};
+		
 		
 		textField = new JTextField();
 		textField.setBounds(1243, 80, 173, 28);
