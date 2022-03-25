@@ -39,6 +39,8 @@ public class Appointments extends JFrame {
 	 * Create the frame.
 	 */
 	public Appointments() {
+		int rowCount = 0;
+		sql_conn sql = new sql_conn();
 		setTitle("Admin");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1550, 850);
@@ -213,6 +215,45 @@ public class Appointments extends JFrame {
 		lblNewLabel_3_1_1_1_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_3_1_1_1_1_1_1.setBounds(1100, 158, 101, 17);
 		contentPane.add(lblNewLabel_3_1_1_1_1_1_1);
+		
+		DefaultTableModel model;
+		Object[] labels = {"appointmentId", "patient","oderId","Date/Time","Technican","Radiologist"};
+        try(Connection conn = (Connection) sql.establishConn())
+        {
+            Statement stmnt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement stmnt2 = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs3 = stmnt.executeQuery("SELECT * FROM appointments");
+            if(rs3.last())
+            {
+                rowCount = rs3.getRow();
+            }
+            System.out.println(rowCount);
+            Object[][] data = new Object[rowCount][6];
+            ResultSet rs = stmnt.executeQuery("SELECT * FROM appointments");
+            rs.next();
+            for(int i = 0; i < rowCount; i++)
+            {
+                int appointmentId = rs.getInt(1);
+                int patient = rs.getInt(2);
+                int orderId = rs.getInt(3);
+                Date date = rs.getDate(5);
+                int Technican = rs.getInt(7);
+                int Radiologist = rs.getInt(6);
+                data[i][0] = appointmentId;
+                data[i][1] = patient;
+                data[i][2] = orderId;
+                data[i][3] = date;
+                data[i][4] = Technican;
+                data[i][5] = Radiologist;
+                rs.next();
+            }
+
+            model = new DefaultTableModel(data, labels);
+            JTable jt = new JTable(model);
+            jt.setBounds(0, 200, 1300, 250);
+            contentPane.add(jt);
+        }catch(Exception e) {e.printStackTrace();};
+		
 		
 		textField = new JTextField();
 		textField.setBounds(1243, 80, 173, 28);
