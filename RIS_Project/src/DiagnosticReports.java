@@ -44,6 +44,8 @@ public class DiagnosticReports {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		int rowCount = 0;
+		sql_conn sql = new sql_conn();
 		frmAdmin = new JFrame();
 		frmAdmin.setTitle("Admin");
 		frmAdmin.setBounds(100, 100, 1550, 850);
@@ -208,39 +210,38 @@ public class DiagnosticReports {
 		
 	}
 	DefaultTableModel model;
-	Object[] labels = {"diagnostic_report_id", "order_id", "patient", "radiologist","diagnostic"};
-	try(Connection conn = (Connection) sql.establishConn())
-	{
-		Statement stmnt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		Statement stmnt2 = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		ResultSet rs3 = stmnt.executeQuery("SELECT * FROM diagnostic_reports");
-		if(rs3.last())
+		Object[] labels = {"diagnostic_report_id", "order_id", "radiologist","diagnostic"};
+		try(Connection conn = (Connection) sql.establishConn())
 		{
-			rowCount = rs3.getRow();
-		}
-		System.out.println(rowCount);
-		Object[][] data = new Object[rowCount][5];
-		ResultSet rs = stmnt.executeQuery("SELECT * FROM diagnostic_reports");
-		rs.next();
-		for(int i = 0; i < rowCount; i++)
-		{
-			int diagnostic_report_id = rs.getInt(1);
-			int order_id = rs.getInt(2);
-			int patient = rs.getInt(3);
-			int radiologist = rs.getInt(4)
-			int diagnostic = rs.getInt(5);
-			data[i][0] = diagnostic_report_id;
-			data[i][1] = order_id;
-			data[i][2] =patient;
-			data[i][3] =radiologist;
+			Statement stmnt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			Statement stmnt2 = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs3 = stmnt.executeQuery("SELECT * FROM diagnostic_reports");
+			if(rs3.last())
+			{
+				rowCount = rs3.getRow();
+			}
+			System.out.println(rowCount);
+			Object[][] data = new Object[rowCount][4];
+			ResultSet rs = stmnt.executeQuery("SELECT * FROM diagnostic_reports");
 			rs.next();
-		}
-		
-		model = new DefaultTableModel(data, labels);
-		JTable jt = new JTable(model);
-		jt.setBounds(0, 200, 1200, 250);
-		contentPane.add(jt);
-	}catch(Exception e) {e.printStackTrace();};
+			for(int i = 0; i < rowCount; i++)
+			{
+				int diagnostic_report_id = rs.getInt(1);
+				int order_id = rs.getInt(2);
+				int radiologist = rs.getInt(4);
+				String diagnostic = rs.getString(5);
+				data[i][0] = diagnostic_report_id;
+				data[i][1] = order_id;
+				data[i][2] =radiologist;
+				data[i][3] = diagnostic;
+				rs.next();
+			}
+			
+			model = new DefaultTableModel(data, labels);
+			JTable jt = new JTable(model);
+			jt.setBounds(0, 200, 1100, 250);
+			frmAdmin.getContentPane().add(jt);
+		}catch(Exception e) {e.printStackTrace();};
 	
 	textField = new JTextField();
 	textField.setBounds(1243, 80, 173, 28);
