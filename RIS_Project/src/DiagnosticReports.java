@@ -198,18 +198,7 @@ public class DiagnosticReports {
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel_3.setBounds(651, 750, 74, 31);
 		frmAdmin.getContentPane().add(lblNewLabel_3);
-	}
-
-	public void setVisible(boolean b) {
-		frmAdmin.setVisible(true);
-		
-	}
-
-	public void setExtendedState(int maximizedBoth) {
-		frmAdmin.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		
-	}
-	DefaultTableModel model;
+		DefaultTableModel model;
 		Object[] labels = {"diagnostic_report_id", "order_id", "radiologist","diagnostic"};
 		try(Connection conn = (Connection) sql.establishConn())
 		{
@@ -242,6 +231,18 @@ public class DiagnosticReports {
 			jt.setBounds(0, 200, 1100, 250);
 			frmAdmin.getContentPane().add(jt);
 		}catch(Exception e) {e.printStackTrace();};
+	}
+
+	public void setVisible(boolean b) {
+		frmAdmin.setVisible(true);
+		
+	}
+
+	public void setExtendedState(int maximizedBoth) {
+		frmAdmin.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		
+	}
+	
 	
 	textField = new JTextField();
 	textField.setBounds(1243, 80, 173, 28);
