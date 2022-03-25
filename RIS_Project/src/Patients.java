@@ -221,26 +221,30 @@ public class Patients extends JFrame {
 		int rowCount = 0;
 		sql_conn sql = new sql_conn();
 		DefaultTableModel model;
-		Object[] labels = {"", ""};
+		Object[] labels = {"Patient ID", "Date of Birth", "Last Name", "First Name"};
 		try(Connection conn = (Connection) sql.establishConn())
 		{
 			Statement stmnt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			Statement stmnt2 = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs3 = stmnt.executeQuery("SELECT * FROM patients_alerts");
+			ResultSet rs3 = stmnt.executeQuery("SELECT * FROM patients");
 			if(rs3.last())
 			{
 				rowCount = rs3.getRow();
 			}
 			System.out.println(rowCount);
 			Object[][] data = new Object[rowCount][5];
-			ResultSet rs = stmnt.executeQuery("SELECT * FROM patients_alerts");
+			ResultSet rs = stmnt.executeQuery("SELECT * FROM patients");
 			rs.next();
 			for(int i = 0; i < rowCount; i++)
 			{
-				int alertId = rs.getInt(2);
-				int alert = rs.getInt(4);
-				data[i][0] = alertId;
-				data[i][1] = alert;
+				int patientId = rs.getInt(1);
+				Date dob = rs.getDate(4);
+				String last = rs.getString(3);
+				String first = rs.getString(2);
+				data[i][0] = patientId;
+				data[i][1] = dob;
+				data[i][2] = last;
+				data[i][3] = first;
 				rs.next();
 			}
 			
@@ -249,6 +253,7 @@ public class Patients extends JFrame {
 			jt.setBounds(0, 200, 1200, 250);
 			contentPane.add(jt);
 		}catch(Exception e) {e.printStackTrace();};
+		
 		
 		textField = new JTextField();
 		textField.setBounds(1243, 80, 173, 28);
