@@ -131,34 +131,45 @@ public class Orders extends JFrame {
 		contentPane.add(lblNewLabel_1);
 		
 		DefaultTableModel model;
-		Object[] labels = {"Modality ID", "Modality"};
+		Object[] labels = {"Order ID", "Patient", "Referral MD", "Modality", "Notes", "Status"};
 		try(Connection conn = (Connection) sql.establishConn())
 		{
 			Statement stmnt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			Statement stmnt2 = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs3 = stmnt.executeQuery("SELECT * FROM modalities");
+			ResultSet rs3 = stmnt.executeQuery("SELECT * FROM orders");
 			if(rs3.last())
 			{
 				rowCount = rs3.getRow();
 			}
 			System.out.println(rowCount);
-			Object[][] data = new Object[rowCount][2];
-			ResultSet rs = stmnt.executeQuery("SELECT * FROM modalities");
+			Object[][] data = new Object[rowCount][6];
+			ResultSet rs = stmnt.executeQuery("SELECT * FROM orders");
 			rs.next();
 			for(int i = 0; i < rowCount; i++)
 			{
-				int modality = rs.getInt(2);
-				int modalityId = rs.getInt(4);
-				data[i][0] = modalityId;
-				data[i][1] = modality;
+				int orderID = rs.getInt(1);
+				int patient = rs.getInt(2);
+				int referral_md = rs.getInt(3);
+				int modality = rs.getInt(4);
+				String notes = rs.getString(6);
+				int report = rs.getInt(7);
+				
+				data[i][0] = orderID;
+				data[i][1] = patient;
+				data[i][2] = referral_md;
+				data[i][3] = modality;
+				data[i][4] = notes;
+				data[i][5] = report;
+				
 				rs.next();
 			}
 			
 			model = new DefaultTableModel(data, labels);
 			JTable jt = new JTable(model);
-			jt.setBounds(0, 200, 600, 250);
+			jt.setBounds(0, 200, 1300, 10000);
 			contentPane.add(jt);
 		}catch(Exception e) {e.printStackTrace();};
+		
 		
 		JLabel lblNewLabel_2 = new JLabel("Search:");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
